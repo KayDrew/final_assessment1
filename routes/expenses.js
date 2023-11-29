@@ -1,3 +1,19 @@
+/** 
+write an export  factory function 
+create "/" route for the landing page 
+create a regex to evaluate  the inputs
+variables to store the total costs per category 
+create variable to store the total cost
+create array to store the costs and categories 
+create a flash message
+create post route to record expenses 
+confirm category name with a switch method  to determine  the id
+extract amounts from the database.
+increment the total cost with the values of the separate categories 
+*/
+
+
+
 export  default function expenses(query){
 let totalAmount=0;
 let weekly=0;
@@ -184,4 +200,4 @@ home,
 recordExpense,
 clearExpenses 
 }
-	}
+}
