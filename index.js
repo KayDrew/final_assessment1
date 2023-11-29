@@ -37,6 +37,7 @@ const routes= route(queries);
 
 app.get("/",routes.home);
 app.post("/expenses", routes.recordExpense);
+app.get("/expenses", routes.getExpenses);
 
 const PORT= process.env.PORT||5432;
 
