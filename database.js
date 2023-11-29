@@ -1,91 +1,53 @@
-export default  function  dbQueries(db){
+import 'dotenv/config';
+import assert from 'assert';
+import database from '../database.js';
+import pkg from 'pg-promise';
+const connectionString = process.env.URL;
+const Pool = pkg();
 
-async  function  create(){
+const db = Pool({
+    connectionString,
+    ssl: true
+});
 
-try{
+let query= database(db)
+
+describe('The Expense Tracker  App',async function(){
 	
-//	await db.none("CREATE TABLE expenses(id INT,description VARCHAR(255) NOT NULL,amount INT NOT NULL,FOREIGN KEY(id) REFERENCES categories(id))");
-
-
-
-}catch(err){
-
-console.log(err);
-
-}
-
-}
-
-
-async function insertCategory(name){
-
-try{
-await  db.none("INSERT INTO  categories(id,name) VALUES (DEFAULT,$1)",name);
-
-console.log("inserted");
-}catch(err){
+beforeEach(async function () {
 	
-console.log(err);
+    try {
+        	
+       await query.clearExpenses();
+       
+           }catch(err){
 
+         console.log(err);
 }
+        
+}  );
+      
+   
+   it("should  be able to add expenses to the table", async function (){
 
-}
+let result=await query.recordExpense(3,"Cinema",200);
 
-async function recordExpense(id,description, amount){
+assert.equal ("inserted",result);
 
-try{
-await  db.none("INSERT INTO  expenses(id,description,amount) VALUES ($1,$2,$3)",[id,description,amount]);
-return "inserted";
-}catch(err){
-	
-console.log(err);
+});
 
-}
+   it("should  be able to clear expenses from the table", async function (){
 
-}
+let result=await query.clearExpenses();
 
+assert.equal ("deleted",result);
 
-async function getExpenses(){
-
-try{
-
-let result= db.manyOrNone("SELECT categories.name, expenses.description, expenses.amount FROM  expenses JOIN categories ON expenses.id=categories.id");
-
-return result;
-
-}catch(err){
-console.log(err);
-
-return [];
-
-}
-}
-
-async  function  clearExpenses(){
-
-try{
-await  db.none("DELETE FROM expenses");
-
-return "deleted";
-}catch(err){
-
-console.log(err);
-}
-
-
-}
+});
 
 
 
+after(function () {
+        db.$pool.end;
+    });
 
-return{
-create,
-insertCategory,
-recordExpense,
-clearExpenses,
-getExpenses
-
-}
-
-}
-
+});
