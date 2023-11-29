@@ -2,7 +2,7 @@
 <div>
 <form action="/expenses"  method="post">
 <h1>Expenses Tracker App</h1>
-<p>{{messages.message}}</p>
+<p class="message">{{messages.message}}</p>
 <label for="description">Description: </label><input type="text" name="description" id="description"/><br/>
 <label for="amount">Amount: </label><input type="number" name="amount" id="amount"/><br/>
 <label  for="category">Category: </label>
@@ -12,18 +12,42 @@
 <option>Weekday</option>
 <option>Weekend</option>
 <option>Monthly</option>
-<option>Once Off</option>
+<option>Once-Off</option>
 </select><br/><br/>
 <button type="submit">Add Expense</button>
 </form>
 </div>
 
 <div>
-<form action="/expenses" method="get"></form>
+
+<span>Total Expenses<span>: <span>{{totalAmount}}</span>
+<table>
+<th>CATEGORY</th>
+<th>TOTALS</th>
+{{#each expenses}}
+<tr>
+<td>{{this.name}}
+<td>{{this.amount}}
+</tr>
+
+{{/ each}}
+</table>
 
 </div>
 
 <div>
-<form action="/clear" method="post"></form>
+<form action="/clear" method="post">
+<button type="submit">Clear All</button>
+</form>
+
 </div>
+<script>
+
+setTimeout(function(){document.querySelector(".message").style.display="none";
+},5000);
+
+document.querySelector(".message").style.display="block";
+
+
+</script>
 </div>
