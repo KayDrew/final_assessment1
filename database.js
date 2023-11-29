@@ -1,53 +1,91 @@
-import 'dotenv/config';
-import assert from 'assert';
-import database from '../database.js';
-import pkg from 'pg-promise';
-const connectionString = process.env.URL;
-const Pool = pkg();
+export default  function  dbQueries(db){
 
-const db = Pool({
-    connectionString,
-    ssl: true
-});
+async  function  create(){
 
-let query= database(db)
-
-describe('The Expense Tracker  App',async function(){
+try{
 	
-beforeEach(async function () {
-	
-    try {
-        	
-       await query.clearExpenses();
-       
-           }catch(err){
+//	await db.none("CREATE TABLE expenses(id INT,description VARCHAR(255) NOT NULL,amount INT NOT NULL,FOREIGN KEY(id) REFERENCES categories(id))");
 
-         console.log(err);
+
+
+}catch(err){
+
+console.log(err);
+
 }
-        
-}  );
-      
-   
-   it("should  be able to add expenses to the table", async function (){
 
-let result=await query.recordExpense(3,"Cinema",200);
-
-assert.equal ("inserted",result);
-
-});
-
-   it("should  be able to clear expenses from the table", async function (){
-
-let result=await query.clearExpenses();
-
-assert.equal ("deleted",result);
-
-});
+}
 
 
+async function insertCategory(name){
 
-after(function () {
-        db.$pool.end;
-    });
+try{
+await  db.none("INSERT INTO  categories(id,name) VALUES (DEFAULT,$1)",name);
 
-});
+console.log("inserted");
+}catch(err){
+	
+console.log(err);
+
+}
+
+}
+
+async function recordExpense(id,description, amount){
+
+try{
+await  db.none("INSERT INTO  expenses(id,description,amount) VALUES ($1,$2,$3)",[id,description,amount]);
+return "inserted";
+}catch(err){
+	
+console.log(err);
+
+}
+
+}
+
+
+async function getExpenses(){
+
+try{
+
+let result= db.manyOrNone("SELECT categories.name, expenses.description, expenses.amount FROM  expenses JOIN categories ON expenses.id=categories.id");
+
+return result;
+
+}catch(err){
+console.log(err);
+
+return [];
+
+}
+}
+
+async  function  clearExpenses(){
+
+try{
+await  db.none("DELETE FROM expenses");
+
+return "deleted";
+}catch(err){
+
+console.log(err);
+}
+
+
+}
+
+
+
+
+return{
+create,
+insertCategory,
+recordExpense,
+clearExpenses,
+getExpenses
+
+}
+
+}
+
