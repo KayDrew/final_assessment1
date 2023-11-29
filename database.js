@@ -49,7 +49,7 @@ async function getExpenses(){
 
 try{
 
-let result= db.manyOrNone("SELECT categories.name, expenses.description, expenses.amount FROM  expenses, INNERJOIN categories ON expenses.id=categories.id");
+let result= db.manyOrNone("SELECT categories.name, expenses.description, expenses.amount FROM  expenses JOIN categories ON expenses.id=categories.id");
 
 return result;
 
@@ -74,7 +74,6 @@ console.log(err);
 
 
 }
-
 
 
 
