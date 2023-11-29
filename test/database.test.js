@@ -36,6 +36,16 @@ assert.equal ("inserted",result);
 
 });
 
+   it("should  be able to clear expenses from the table", async function (){
+
+let result=await query.clearExpenses();
+
+assert.equal ("deleted",result);
+
+});
+
+
+
 after(function () {
         db.$pool.end;
     });
